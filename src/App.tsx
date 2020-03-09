@@ -1,44 +1,36 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, RouteProp} from '@react-navigation/native';
+import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack';
+import {BaseScreen} from './BaseScreen';
 
-interface AppStyle {
-  wrapper: ViewStyle;
-  title: TextStyle;
+export interface AppScreenProps {
+    text: string;
 }
 
-const App: React.FC = (): React.ReactElement => {
-  const style: StyleSheet.NamedStyles<AppStyle> = StyleSheet.create({
-    wrapper: {
-      marginTop: 32,
-      paddingHorizontal: 24,
-    },
-    title: {
-      fontSize: 24,
-      fontWeight: '600',
-    },
-  });
+export enum AppScreen {
+    Home = "Home",
+}
 
+export type AppScreens = {
+    Home: AppScreenProps;
+}
+
+export type BaseScreenRouteProp = RouteProp<AppScreens, AppScreen.Home>;
+
+export type BaseScreenNavigationProp = StackNavigationProp<AppScreens, AppScreen.Home>;
+
+const App: React.FC = (): React.ReactElement => {
+  const Stack = createStackNavigator<AppScreens>();
   return (
     <>
       <NavigationContainer>
-      <StatusBar />
-      <SafeAreaView>
-        <ScrollView>
-          <View style={style.wrapper}>
-            <Text style={style.title}>React Native</Text>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+          <Stack.Navigator>
+              <Stack.Screen
+                  name={AppScreen.Home}
+                  component={BaseScreen}
+                  initialParams={{text: "Example screen"}}
+              />
+          </Stack.Navigator>
       </NavigationContainer>
     </>
   );
